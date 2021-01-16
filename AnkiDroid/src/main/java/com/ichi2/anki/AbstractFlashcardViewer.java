@@ -1420,9 +1420,8 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity i
         hideLookupButton();
         int buttonNumber = getCol().getSched().answerButtons(mCurrentCard);
         // Detect invalid ease for current card (e.g. by using keyboard shortcut or gesture).
-        if (buttonNumber < ease) {
-            return;
-        }
+        ease = getRecommendedEase(false);
+
         // Set the dots appearing below the toolbar
         switch (ease) {
             case EASE_1:
@@ -1705,7 +1704,10 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity i
 
     protected void displayAnswerBottomBar() {
         mFlipCardLayout.setClickable(false);
-        mEaseButtonsLayout.setVisibility(View.VISIBLE);
+        String deckName = Decks.basename(getCol().getDecks().get(mCurrentCard.getDid()).getString("name"));
+        if(deckName.equals("Deutsch Mehrzahl")) {
+            mEaseButtonsLayout.setVisibility(View.VISIBLE);
+        }
 
         Runnable after = () -> mFlipCardLayout.setVisibility(View.GONE);
 
